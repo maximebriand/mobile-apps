@@ -2,7 +2,9 @@
   "name": "native-apps",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start-ios": "npx cap run ios -l --external"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "v16.0.0-next.7",
