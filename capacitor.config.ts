@@ -5,6 +5,15 @@ const config: CapacitorConfig = {
   appName: 'golden-hour',
   webDir: 'dist/apps/golden-hour',
   bundledWebRuntime: false,
+  "plugins": {
+    "Geolocation": {
+      "ios": {
+        "requestPermissions": {
+          "location": "whenInUse"
+        }
+      }
+    }
+  },
   "server": {
     "url": "http://localhost:4200"
   }
