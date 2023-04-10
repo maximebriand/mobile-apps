@@ -1,10 +1,20 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "plugins": [
+    "@nrwl/nx"
+  ],
+
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -13,8 +23,49 @@
             "allow": [],
             "depConstraints": [
               {
+                "sourceTag": "utils",
+                "notDependOnLibsWithTags": [
+                  "client"
+                ]
+              },
+              {
+                "sourceTag": "atoms",
+                "notDependOnLibsWithTags": [
+                  "molecules",
+                  "client"
+                ]
+              },
+              {
+                "sourceTag": "molecules",
+                "notDependOnLibsWithTags": [
+                  "organisms",
+                  "app"
+                ]
+              },
+              {
+                "sourceTag": "organisms",
+                "notDependOnLibsWithTags": [
+                  "app"
+                ]
+              },
+              {
+                "sourceTag": "services",
+                "notDependOnLibsWithTags": [
+                  "ui"
+                ]
+              },
+              {
+                "sourceTag": "test",
+                "onlyDependOnLibsWithTags": [
+                  "utils",
+                  "models"
+                ]
+              },
+              {
                 "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
+                "onlyDependOnLibsWithTags": [
+                  "*"
+                ]
               }
             ]
           }
@@ -22,20 +73,26 @@
       }
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "excludedFiles": [
+        "*.stories.ts"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/typescript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
-      "rules": {}
-    },
-    {
-      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
-      "env": {
-        "jest": true
-      },
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/javascript"
+      ],
       "rules": {}
     }
   ]

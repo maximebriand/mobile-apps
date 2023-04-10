@@ -1,39 +1,33 @@
-import {Component, OnInit, signal} from '@angular/core';
-import { RouterModule } from "@angular/router";
-import { IonicModule } from "@ionic/angular";
-import {Geolocation, Position} from '@capacitor/geolocation';
-import {catchError, Observable, of, tap} from 'rxjs';
+import { Component, NgModule, OnInit, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
+import { Geolocation, Position } from '@capacitor/geolocation';
+import { catchError, Observable, of, tap } from 'rxjs';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
-  standalone: true,
-  imports: [ RouterModule, IonicModule],
-  selector: "native-apps-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"],
+  selector: 'native-apps-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = "golden-hour";
-  watchId!: any;
+  title = 'golden-hour';
 
-  public signal = signal(19)
+  public latitude = signal<number | null>(null);
 
-  public  latitude= signal<number|null>(null)
-  public longitude=signal<number|null>(null)
+  public longitude = signal<number | null>(null);
 
-
-  error = signal<string|null>('error de base') ;
+  error = signal<string | null>('error de base');
 
   public getCurrentPosition() {
-
-
     this.getCurrentPositionObservable()
       .pipe(
         tap(console.log),
         tap((any) => console.log('tap', any)),
-        tap(position => {
+        tap((position) => {
           console.log('Current position:', position.coords);
         }),
-        catchError(error => {
+        catchError((error) => {
           console.error('Error getting location:', error);
           return of(null);
         })
@@ -42,36 +36,34 @@ export class AppComponent implements OnInit {
   }
 
   getCurrentPositionObservable(): Observable<Position> {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       Geolocation.getCurrentPosition()
-        .then(position => {
+        .then((position) => {
           observer.next(position);
           observer.complete();
         })
-        .catch(error => {
+        .catch((error) => {
           observer.error(error);
         });
     });
   }
 
-
   async ngOnInit() {
     const permissionGranted = await this.requestGeolocationPermission();
     if (permissionGranted) {
       this.getCurrentPositionObservable().subscribe(
-        position => {
+        (position) => {
           this.latitude.set(position.coords.latitude);
           this.longitude.set(position.coords.longitude);
           console.log('Current position:', position.coords);
         },
-        error => {
+        (error) => {
           this.error.set(error);
           console.error('Error getting location:', error);
         }
       );
     }
   }
-
 
   async requestGeolocationPermission() {
     try {
@@ -94,5 +86,12 @@ export class AppComponent implements OnInit {
       return false;
     }
   }
-
 }
+
+@NgModule({
+  imports: [RouterModule, IonicModule.forRoot(), BrowserModule],
+  declarations: [AppComponent],
+  exports: [AppComponent],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
